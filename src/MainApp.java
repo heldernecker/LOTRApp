@@ -100,7 +100,7 @@ public class MainApp extends Application {
     	quest.setSpacing(10);
     	
     	double labelsW = 130;
-    	// Line 3 - finalThreat and roundsTaken
+    	// Line 3 - Final Threat and Rounds Taken
     	Label finalThreatL = new Label("Final Threat:");
     	finalThreatL.setPrefWidth(labelsW);
     	TextField finalThreatTF = new TextField();
@@ -114,9 +114,9 @@ public class MainApp extends Application {
     	HBox line3 = new HBox(finalThreatL, finalThreatTF, roundsL, roundsTF);
     	line3.setSpacing(10);
     	
-    	// Line 4 - 
-    	Label demageL = new Label("Demage on Heroes:");
-    	demageL.setPrefWidth(labelsW);
+    	// Line 4 - Damage on Heroes and Dead Heroes Cost
+    	Label damageL = new Label("Damage on Heroes:");
+    	damageL.setPrefWidth(labelsW);
     	TextField demageTF = new TextField();
     	demageTF.setPrefWidth(50);
     	
@@ -125,9 +125,10 @@ public class MainApp extends Application {
     	TextField deadHeroesCostTF = new TextField();
     	deadHeroesCostTF.setPrefWidth(50);
     	
-    	HBox line4 = new HBox(demageL, demageTF, deadHeroesCostL, deadHeroesCostTF);
+    	HBox line4 = new HBox(damageL, demageTF, deadHeroesCostL, deadHeroesCostTF);
     	line4.setSpacing(10);
     	
+    	// Line 5 - Victory Points
     	Label victoryL = new Label("Victory Points:");
     	victoryL.setPrefWidth(labelsW);
     	TextField victoryTF = new TextField();
@@ -136,6 +137,7 @@ public class MainApp extends Application {
     	HBox line5 = new HBox(victoryL, victoryTF);
     	line5.setSpacing(10);
     	
+    	// Buttons line
     	HBox buttonHBox = new HBox(cancel, addScore);
     	buttonHBox.setAlignment(Pos.BASELINE_RIGHT);
     	buttonHBox.setSpacing(10);
