@@ -1,5 +1,6 @@
 
 public class ScoreModel {
+	private int id;
 	private String heroes;
 	private String quest;
 	private int finalThreat;
@@ -23,11 +24,26 @@ public class ScoreModel {
 		this.finalScore = finalThreat + deadHeroesCost + demageOnHeroes + (10 * roundsTaken) - victoryPoints;
 	}
 
-	public ScoreModel(String heroes, String quest, int finalScore) {
+	public ScoreModel(int id, String heroes, String quest, int finalThreat, int deadHeroesCost, int demageOnHeroes,
+			int roundsTaken, int victoryPoints, int finalScore) {
 		super();
+		this.id = id;
 		this.heroes = heroes;
 		this.quest = quest;
+		this.finalThreat = finalThreat;
+		this.deadHeroesCost = deadHeroesCost;
+		this.demageOnHeroes = demageOnHeroes;
+		this.roundsTaken = roundsTaken;
+		this.victoryPoints = victoryPoints;
 		this.finalScore = finalScore;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getHeroes() {
@@ -96,10 +112,12 @@ public class ScoreModel {
 
 	@Override
 	public String toString() {
-		return "ScoreModel [heroes=" + heroes + ", quest=" + quest + ", finalThreat=" + finalThreat
+		return "ScoreModel [id=" + id + ", heroes=" + heroes + ", quest=" + quest + ", finalThreat=" + finalThreat
 				+ ", deadHeroesCost=" + deadHeroesCost + ", demageOnHeroes=" + demageOnHeroes + ", roundsTaken="
 				+ roundsTaken + ", victoryPoints=" + victoryPoints + ", finalScore=" + finalScore + "]";
 	}
+
+	
 	
 	
 }

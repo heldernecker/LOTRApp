@@ -22,7 +22,8 @@ public class MainApp extends Application {
 	
 	private GridPane mainPane = new GridPane();
 	private Button newRecord = new Button("Add New Score");
-	private HBox options = new HBox(newRecord);
+	private Button seeRecord = new Button("Details");
+	private HBox options = new HBox(newRecord, seeRecord);
 	
 	@SuppressWarnings("rawtypes")
 	private TableView tableView = new TableView();
@@ -54,9 +55,15 @@ public class MainApp extends Application {
     	tableView.setPrefHeight(240);
     	
     	options.setAlignment(Pos.BASELINE_CENTER);
+    	options.setSpacing(10);
         
         newRecord.setOnAction(e -> {
         	showAddScene();
+        });
+        
+        seeRecord.setOnAction(e -> {
+        	ScoreModel score = (ScoreModel) tableView.getSelectionModel().getSelectedItem();
+        	showDetails(score);
         });
                
         mainPane.add(tableView, 0, 0, 1, 1);
@@ -71,6 +78,9 @@ public class MainApp extends Application {
         theStage.show();
     }    
     
+	/**
+	 * Opens new scene where user inputs the necessary data to calculate the final score
+	 */
     public void showAddScene() {
     	GridPane addPane = new GridPane();
     	addPane.setVgap(10);
@@ -178,8 +188,116 @@ public class MainApp extends Application {
     	addStage.setTitle("Add new score");
     	addStage.setScene(addScene);
     	addStage.show();
-    }    
+    }
     
+    /**
+     * Opens new scene in read only mode where user can see the details of a specific score.
+     * @param scoreModel
+     */
+    public void showDetails(ScoreModel scoreModel) {
+    	// dbServices.selectScore(scoreModel.getId());
+    	
+    	GridPane addPane = new GridPane();
+    	addPane.setVgap(10);
+    	
+    	BorderPane fullPane = new BorderPane(addPane);
+    	BorderPane.setMargin(addPane, new Insets(10, 10, 10, 10));
+    	
+    	Scene addScene = new Scene(fullPane);
+    	Stage addStage = new Stage();
+    	Button close = new Button("Close");
+    	
+    	// Hero line
+    	Label heroesL = new Label("Heroes:");
+    	heroesL.setPrefWidth(60);
+    	TextField heroesTF = new TextField(scoreModel.getHeroes());
+    	heroesTF.setDisable(true);
+    	heroesTF.setPrefWidth(320);
+    	HBox heroes = new HBox(heroesL, heroesTF);
+    	heroes.setSpacing(10);
+    	
+    	// Quest line
+    	Label questL = new Label("Quest:");
+    	questL.setPrefWidth(60);
+    	TextField questTF = new TextField(scoreModel.getQuest());
+    	questTF.setDisable(true);
+    	questTF.setPrefWidth(320);
+    	HBox quest = new HBox(questL, questTF);
+    	quest.setSpacing(10);
+    	
+    	double labelsW = 130;
+    	// Line 3 - Final Threat and Rounds Taken
+    	Label finalThreatL = new Label("Final Threat:");
+    	finalThreatL.setPrefWidth(labelsW);
+    	TextField finalThreatTF = new TextField(scoreModel.getFinalThreat() + "");
+    	finalThreatTF.setDisable(true);
+    	finalThreatTF.setPrefWidth(50);
+    	
+    	Label roundsL = new Label("Rounds Taken:");
+    	roundsL.setPrefWidth(labelsW);
+    	TextField roundsTF = new TextField(scoreModel.getRoundsTaken() + "");
+    	roundsTF.setDisable(true);
+    	roundsTF.setPrefWidth(50);
+    	
+    	HBox line3 = new HBox(finalThreatL, finalThreatTF, roundsL, roundsTF);
+    	line3.setSpacing(10);
+    	
+    	// Line 4 - Damage on Heroes and Dead Heroes Cost
+    	Label damageL = new Label("Damage on Heroes:");
+    	damageL.setPrefWidth(labelsW);
+    	TextField demageTF = new TextField(scoreModel.getDemageOnHeroes() + "");
+    	demageTF.setDisable(true);
+    	demageTF.setPrefWidth(50);
+    	
+    	Label deadHeroesCostL = new Label("Dead Heroes Cost:");
+    	deadHeroesCostL.setPrefWidth(labelsW);
+    	TextField deadHeroesCostTF = new TextField(scoreModel.getDeadHeroesCost() + "");
+    	deadHeroesCostTF.setDisable(true);
+    	deadHeroesCostTF.setPrefWidth(50);
+    	
+    	HBox line4 = new HBox(damageL, demageTF, deadHeroesCostL, deadHeroesCostTF);
+    	line4.setSpacing(10);
+    	
+    	// Line 5 - Victory Points
+    	Label victoryL = new Label("Victory Points:");
+    	victoryL.setPrefWidth(labelsW);
+    	TextField victoryTF = new TextField(scoreModel.getVictoryPoints() + "");
+    	victoryTF.setDisable(true);
+    	victoryTF.setPrefWidth(50);
+    	
+    	HBox line5 = new HBox(victoryL, victoryTF);
+    	line5.setSpacing(10);
+    	
+    	// Buttons line
+    	HBox buttonHBox = new HBox(close);
+    	buttonHBox.setAlignment(Pos.BASELINE_RIGHT);
+    	buttonHBox.setSpacing(10);
+    	
+    	Separator separator1 = new Separator(Orientation.HORIZONTAL);
+    	Separator separator2 = new Separator(Orientation.HORIZONTAL);
+    	
+    	addPane.add(heroes, 0, 0);
+    	addPane.add(quest, 0, 1);
+    	addPane.add(separator1, 0, 2);
+    	addPane.add(line3, 0, 3);
+    	addPane.add(line4, 0, 4);
+    	addPane.add(line5, 0, 5);
+    	addPane.add(separator2, 0, 6);
+    	addPane.add(buttonHBox, 0, 7);
+    	
+    	close.setOnAction(e -> {
+    		addStage.close();
+    	});
+    	
+    	addStage.setTitle("Add new score");
+    	addStage.setScene(addScene);
+    	addStage.show();
+    }
+    
+    /**
+     * Method to load the data when the app at first run and also to update after a score is inserted
+     * @param scores
+     */
     @SuppressWarnings("unchecked")
 	public void loadScores(LinkedList<ScoreModel> scores) {
     	tableView.getItems().clear();
