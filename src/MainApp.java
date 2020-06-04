@@ -176,7 +176,7 @@ public class MainApp extends Application {
         					Integer.parseInt(demageTF.getText()), Integer.parseInt(roundsTF.getText()), 
         					Integer.parseInt(victoryTF.getText()));
         			
-        			dbServices.update(score);
+        			dbServices.insert(score);
         			
         			System.out.println("Score inserted: " + score.toString());
         			loadScores(dbServices.selectAll());
