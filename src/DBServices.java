@@ -79,8 +79,8 @@ public class DBServices {
         		+ "rounds_taken, victory_points, final_score) VALUES(?,?,?,?,?,?,?,?)";  
    
         try{  
-            Connection conn = this.connect();  
-            PreparedStatement pstmt = conn.prepareStatement(sql);  
+            Connection conn = this.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, score.getHeroes());
             pstmt.setString(2, score.getQuest());
             pstmt.setInt(3, score.getFinalThreat());
@@ -90,8 +90,8 @@ public class DBServices {
             pstmt.setInt(7, score.getVictoryPoints());
             pstmt.setInt(8, score.getFinalScore());
             pstmt.executeUpdate();  
-        } catch (SQLException e) {  
-            System.out.println(e.getMessage());  
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }  
     }
     
@@ -104,9 +104,9 @@ public class DBServices {
         String sql = "SELECT * FROM scores";
           
         try {  
-            Connection conn = this.connect();  
-            Statement stmt  = conn.createStatement();  
-            ResultSet rs    = stmt.executeQuery(sql);  
+            Connection conn = this.connect();
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
               
             // loop through the result set  
             while (rs.next()) {
@@ -127,40 +127,5 @@ public class DBServices {
             System.out.println(e.getMessage());
             return results;
         }
-    }
-    
-    /**
-     * Method to get a specific score in database
-     * @param id
-     * @return
-     */
-    public LinkedList<ScoreModel> selectScore(int id) {
-    	LinkedList<ScoreModel> results = new LinkedList<>();
-    	String sql = "SELECT * FROM scores WHERE id = " + id;
-        
-        try {  
-            Connection conn = this.connect();  
-            Statement stmt  = conn.createStatement();  
-            ResultSet rs    = stmt.executeQuery(sql);
-            
-            // loop through the result set  
-            while (rs.next()) {            	
-            	String heroes = rs.getString("heroes");
-                String quest = rs.getString("quest");
-                int finalThreat = rs.getInt("final_threat");
-                int deadHeroesCost = rs.getInt("dead_heroes_cost");
-                int demageOnHeroes = rs.getInt("demage_on_heroes");
-                int roundsTaken = rs.getInt("rounds_taken");
-                int victoryPoints = rs.getInt("victory_points");
-                
-                ScoreModel scoreModel = new ScoreModel(heroes, quest, finalThreat, deadHeroesCost, 
-                		demageOnHeroes, roundsTaken, victoryPoints);
-                results.add(scoreModel);
-            }
-            return results;
-        } catch (SQLException e) {  
-            System.out.println(e.getMessage());
-            return results;
-        }    	
     }
 }

@@ -23,7 +23,8 @@ public class MainApp extends Application {
 	private GridPane mainPane = new GridPane();
 	private Button newRecord = new Button("Add New Score");
 	private Button seeRecord = new Button("Details");
-	private HBox options = new HBox(newRecord, seeRecord);
+	private Button updateRecord = new Button("Update");
+	private HBox options = new HBox(newRecord, seeRecord, updateRecord);
 	
 	@SuppressWarnings("rawtypes")
 	private TableView tableView = new TableView();
@@ -58,12 +59,17 @@ public class MainApp extends Application {
     	options.setSpacing(10);
         
         newRecord.setOnAction(e -> {
-        	showAddScene();
+        	openScoreDetails(1, null);
         });
         
         seeRecord.setOnAction(e -> {
         	ScoreModel score = (ScoreModel) tableView.getSelectionModel().getSelectedItem();
-        	showDetails(score);
+        	openScoreDetails(2, score);
+        });
+        
+        updateRecord.setOnAction(e -> {
+        	ScoreModel score = (ScoreModel) tableView.getSelectionModel().getSelectedItem();
+        	openScoreDetails(3, score);
         });
                
         mainPane.add(tableView, 0, 0, 1, 1);
@@ -76,22 +82,23 @@ public class MainApp extends Application {
         theStage.setTitle("Lord of the Rings - Card Game Score Records");
         theStage.setScene(scene);
         theStage.show();
-    }    
-    
+    }
+	
 	/**
-	 * Opens new scene where user inputs the necessary data to calculate the final score
+	 * Opens new scene allowing the user to add, edit or visualize a score
+	 * @param opt
+	 * @param scoreModel
 	 */
-    public void showAddScene() {
-    	GridPane addPane = new GridPane();
+	public void openScoreDetails(int opt, ScoreModel scoreModel) {
+		String title = "";
+		GridPane addPane = new GridPane();
     	addPane.setVgap(10);
     	
     	BorderPane fullPane = new BorderPane(addPane);
     	BorderPane.setMargin(addPane, new Insets(10, 10, 10, 10));
     	
     	Scene addScene = new Scene(fullPane);
-    	Stage addStage = new Stage();
-    	Button addScore = new Button("Add Score");
-    	Button cancel = new Button("Cancel");
+    	Stage addStage = new Stage();    	
     	
     	// Hero line
     	Label heroesL = new Label("Heroes:");
@@ -148,12 +155,79 @@ public class MainApp extends Application {
     	line5.setSpacing(10);
     	
     	// Buttons line
-    	HBox buttonHBox = new HBox(cancel, addScore);
+    	HBox buttonHBox = new HBox();
+    	
     	buttonHBox.setAlignment(Pos.BASELINE_RIGHT);
     	buttonHBox.setSpacing(10);
     	
     	Separator separator1 = new Separator(Orientation.HORIZONTAL);
     	Separator separator2 = new Separator(Orientation.HORIZONTAL);
+    	
+    	if (opt == 1) { // Users will be able to add a new score
+    		title = "Add New Score";
+    		Button addScore = new Button("Add Score");
+        	Button cancel = new Button("Cancel");
+        	buttonHBox.getChildren().addAll(cancel, addScore);
+        	
+    		addScore.setOnAction(e -> {
+        		try {    			
+        			ScoreModel score = new ScoreModel(heroesTF.getText(), questTF.getText(), 
+        					Integer.parseInt(finalThreatTF.getText()), Integer.parseInt(deadHeroesCostTF.getText()), 
+        					Integer.parseInt(demageTF.getText()), Integer.parseInt(roundsTF.getText()), 
+        					Integer.parseInt(victoryTF.getText()));
+        			
+        			dbServices.insert(score);
+        			
+        			System.out.println("Score inserted: " + score.toString());
+        			loadScores(dbServices.selectAll());
+        			addStage.close();
+        		} catch (NumberFormatException ex) {
+        			System.out.println("Please enter only numbers after the second field");
+        		}    		
+        	});
+        	
+        	cancel.setOnAction(e -> {
+        		addStage.close();
+        	});    		
+    	} else {    		
+    		Button close = new Button("Close");
+    		buttonHBox.getChildren().add(close);
+    		
+    		heroesTF.setText(scoreModel.getHeroes());        	
+        	questTF.setText(scoreModel.getQuest());        	
+        	finalThreatTF.setText(scoreModel.getFinalThreat() + "");       	    	
+        	roundsTF.setText(scoreModel.getRoundsTaken() + "");        	
+        	demageTF.setText(scoreModel.getDemageOnHeroes() + "");        	
+        	deadHeroesCostTF.setText(scoreModel.getDeadHeroesCost() + "");        	
+        	victoryTF.setText(scoreModel.getVictoryPoints() + "");        	
+        	
+        	close.setOnAction(e -> {
+        		addStage.close();
+        	});
+        	
+        	if (opt == 2) { // User will just see the details
+        		title = "Score Details";
+        		
+            	heroesTF.setDisable(true);            	
+            	questTF.setDisable(true);            	
+            	finalThreatTF.setDisable(true);           	
+            	roundsTF.setDisable(true);            	
+            	demageTF.setDisable(true);            	
+            	deadHeroesCostTF.setDisable(true);             	
+            	victoryTF.setDisable(true);
+        		
+        	} else if (opt == 3) { // Users will be able to update the score
+        		title = "Update Score";
+        		
+        		Button update = new Button("Update");
+        		buttonHBox.getChildren().add(update);
+        		
+        		update.setOnAction(e -> {
+        			//TODO - Update Score
+        			System.out.println(scoreModel.toString());
+        		});
+        	}
+    	}
     	
     	addPane.add(heroes, 0, 0);
     	addPane.add(quest, 0, 1);
@@ -164,135 +238,10 @@ public class MainApp extends Application {
     	addPane.add(separator2, 0, 6);
     	addPane.add(buttonHBox, 0, 7);
     	
-    	addScore.setOnAction(e -> {
-    		try {    			
-    			ScoreModel score = new ScoreModel(heroesTF.getText(), questTF.getText(), 
-    					Integer.parseInt(finalThreatTF.getText()), Integer.parseInt(deadHeroesCostTF.getText()), 
-    					Integer.parseInt(demageTF.getText()), Integer.parseInt(roundsTF.getText()), 
-    					Integer.parseInt(victoryTF.getText()));
-    			
-    			dbServices.insert(score);
-    			
-    			System.out.println("Score inserted: " + score.toString());
-    			loadScores(dbServices.selectAll());
-    			addStage.close();
-    		} catch (NumberFormatException ex) {
-    			System.out.println("Please enter only numbers after the second field");
-    		}    		
-    	});
-    	
-    	cancel.setOnAction(e -> {
-    		addStage.close();
-    	});
-    	
-    	addStage.setTitle("Add new score");
+    	addStage.setTitle(title);
     	addStage.setScene(addScene);
     	addStage.show();
-    }
-    
-    /**
-     * Opens new scene in read only mode where user can see the details of a specific score.
-     * @param scoreModel
-     */
-    public void showDetails(ScoreModel scoreModel) {
-    	// dbServices.selectScore(scoreModel.getId());
-    	
-    	GridPane addPane = new GridPane();
-    	addPane.setVgap(10);
-    	
-    	BorderPane fullPane = new BorderPane(addPane);
-    	BorderPane.setMargin(addPane, new Insets(10, 10, 10, 10));
-    	
-    	Scene addScene = new Scene(fullPane);
-    	Stage addStage = new Stage();
-    	Button close = new Button("Close");
-    	
-    	// Hero line
-    	Label heroesL = new Label("Heroes:");
-    	heroesL.setPrefWidth(60);
-    	TextField heroesTF = new TextField(scoreModel.getHeroes());
-    	heroesTF.setDisable(true);
-    	heroesTF.setPrefWidth(320);
-    	HBox heroes = new HBox(heroesL, heroesTF);
-    	heroes.setSpacing(10);
-    	
-    	// Quest line
-    	Label questL = new Label("Quest:");
-    	questL.setPrefWidth(60);
-    	TextField questTF = new TextField(scoreModel.getQuest());
-    	questTF.setDisable(true);
-    	questTF.setPrefWidth(320);
-    	HBox quest = new HBox(questL, questTF);
-    	quest.setSpacing(10);
-    	
-    	double labelsW = 130;
-    	// Line 3 - Final Threat and Rounds Taken
-    	Label finalThreatL = new Label("Final Threat:");
-    	finalThreatL.setPrefWidth(labelsW);
-    	TextField finalThreatTF = new TextField(scoreModel.getFinalThreat() + "");
-    	finalThreatTF.setDisable(true);
-    	finalThreatTF.setPrefWidth(50);
-    	
-    	Label roundsL = new Label("Rounds Taken:");
-    	roundsL.setPrefWidth(labelsW);
-    	TextField roundsTF = new TextField(scoreModel.getRoundsTaken() + "");
-    	roundsTF.setDisable(true);
-    	roundsTF.setPrefWidth(50);
-    	
-    	HBox line3 = new HBox(finalThreatL, finalThreatTF, roundsL, roundsTF);
-    	line3.setSpacing(10);
-    	
-    	// Line 4 - Damage on Heroes and Dead Heroes Cost
-    	Label damageL = new Label("Damage on Heroes:");
-    	damageL.setPrefWidth(labelsW);
-    	TextField demageTF = new TextField(scoreModel.getDemageOnHeroes() + "");
-    	demageTF.setDisable(true);
-    	demageTF.setPrefWidth(50);
-    	
-    	Label deadHeroesCostL = new Label("Dead Heroes Cost:");
-    	deadHeroesCostL.setPrefWidth(labelsW);
-    	TextField deadHeroesCostTF = new TextField(scoreModel.getDeadHeroesCost() + "");
-    	deadHeroesCostTF.setDisable(true);
-    	deadHeroesCostTF.setPrefWidth(50);
-    	
-    	HBox line4 = new HBox(damageL, demageTF, deadHeroesCostL, deadHeroesCostTF);
-    	line4.setSpacing(10);
-    	
-    	// Line 5 - Victory Points
-    	Label victoryL = new Label("Victory Points:");
-    	victoryL.setPrefWidth(labelsW);
-    	TextField victoryTF = new TextField(scoreModel.getVictoryPoints() + "");
-    	victoryTF.setDisable(true);
-    	victoryTF.setPrefWidth(50);
-    	
-    	HBox line5 = new HBox(victoryL, victoryTF);
-    	line5.setSpacing(10);
-    	
-    	// Buttons line
-    	HBox buttonHBox = new HBox(close);
-    	buttonHBox.setAlignment(Pos.BASELINE_RIGHT);
-    	buttonHBox.setSpacing(10);
-    	
-    	Separator separator1 = new Separator(Orientation.HORIZONTAL);
-    	Separator separator2 = new Separator(Orientation.HORIZONTAL);
-    	
-    	addPane.add(heroes, 0, 0);
-    	addPane.add(quest, 0, 1);
-    	addPane.add(separator1, 0, 2);
-    	addPane.add(line3, 0, 3);
-    	addPane.add(line4, 0, 4);
-    	addPane.add(line5, 0, 5);
-    	addPane.add(separator2, 0, 6);
-    	addPane.add(buttonHBox, 0, 7);
-    	
-    	close.setOnAction(e -> {
-    		addStage.close();
-    	});
-    	
-    	addStage.setTitle("Add new score");
-    	addStage.setScene(addScene);
-    	addStage.show();
-    }
+	}
     
     /**
      * Method to load the data when the app at first run and also to update after a score is inserted
