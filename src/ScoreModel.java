@@ -20,12 +20,11 @@ public class ScoreModel {
 		this.demageOnHeroes = demageOnHeroes;
 		this.roundsTaken = roundsTaken;
 		this.victoryPoints = victoryPoints;
-		
 		this.finalScore = finalThreat + deadHeroesCost + demageOnHeroes + (10 * roundsTaken) - victoryPoints;
 	}
 
 	public ScoreModel(int id, String heroes, String quest, int finalThreat, int deadHeroesCost, int demageOnHeroes,
-			int roundsTaken, int victoryPoints, int finalScore) {
+			int roundsTaken, int victoryPoints) {
 		super();
 		this.id = id;
 		this.heroes = heroes;
@@ -35,7 +34,7 @@ public class ScoreModel {
 		this.demageOnHeroes = demageOnHeroes;
 		this.roundsTaken = roundsTaken;
 		this.victoryPoints = victoryPoints;
-		this.finalScore = finalScore;
+		this.finalScore = finalThreat + deadHeroesCost + demageOnHeroes + (10 * roundsTaken) - victoryPoints;
 	}
 
 	public int getId() {

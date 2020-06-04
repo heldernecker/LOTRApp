@@ -176,14 +176,14 @@ public class MainApp extends Application {
         					Integer.parseInt(demageTF.getText()), Integer.parseInt(roundsTF.getText()), 
         					Integer.parseInt(victoryTF.getText()));
         			
-        			dbServices.insert(score);
+        			dbServices.update(score);
         			
         			System.out.println("Score inserted: " + score.toString());
         			loadScores(dbServices.selectAll());
         			addStage.close();
         		} catch (NumberFormatException ex) {
         			System.out.println("Please enter only numbers after the second field");
-        		}    		
+        		}
         	});
         	
         	cancel.setOnAction(e -> {
@@ -223,8 +223,20 @@ public class MainApp extends Application {
         		buttonHBox.getChildren().add(update);
         		
         		update.setOnAction(e -> {
-        			//TODO - Update Score
-        			System.out.println(scoreModel.toString());
+        			try {    			
+            			ScoreModel score = new ScoreModel(scoreModel.getId(), heroesTF.getText(), questTF.getText(), 
+            					Integer.parseInt(finalThreatTF.getText()), Integer.parseInt(deadHeroesCostTF.getText()), 
+            					Integer.parseInt(demageTF.getText()), Integer.parseInt(roundsTF.getText()), 
+            					Integer.parseInt(victoryTF.getText()));
+            			
+            			dbServices.update(score);
+            			
+            			System.out.println("Score updated: " + score.toString());
+            			loadScores(dbServices.selectAll());
+            			addStage.close();
+            		} catch (NumberFormatException ex) {
+            			System.out.println("Please enter only numbers after the second field");
+            		}
         		});
         	}
     	}

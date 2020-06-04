@@ -92,7 +92,40 @@ public class DBServices {
             pstmt.executeUpdate();  
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }  
+        }
+    }
+    
+    /**
+     * Update score in database
+     * @param score
+     */
+    public void update(ScoreModel score) {
+    	String sql = "UPDATE scores SET heroes = ?, "
+    			+ "quest = ?, "
+    			+ "final_threat = ?, "
+    			+ "dead_heroes_cost = ?, "
+    			+ "demage_on_heroes = ?, "
+    			+ "rounds_taken = ?, "
+    			+ "victory_points = ?, "
+    			+ "final_score = ? "
+    			+ "WHERE id = ?";
+    	
+    	try{  
+            Connection conn = this.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, score.getHeroes());
+            pstmt.setString(2, score.getQuest());
+            pstmt.setInt(3, score.getFinalThreat());
+            pstmt.setInt(4, score.getDeadHeroesCost());
+            pstmt.setInt(5, score.getDemageOnHeroes());
+            pstmt.setInt(6, score.getRoundsTaken());
+            pstmt.setInt(7, score.getVictoryPoints());
+            pstmt.setInt(8, score.getFinalScore());
+            pstmt.setInt(9, score.getId());
+            pstmt.executeUpdate();  
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
     
     /**
@@ -110,6 +143,7 @@ public class DBServices {
               
             // loop through the result set  
             while (rs.next()) {
+            	int id = rs.getInt("id");
             	String heroes = rs.getString("heroes");
                 String quest = rs.getString("quest");
                 int finalThreat = rs.getInt("final_threat");
@@ -118,7 +152,7 @@ public class DBServices {
                 int roundsTaken = rs.getInt("rounds_taken");
                 int victoryPoints = rs.getInt("victory_points");
                 
-                ScoreModel scoreModel = new ScoreModel(heroes, quest, finalThreat, deadHeroesCost, 
+                ScoreModel scoreModel = new ScoreModel(id, heroes, quest, finalThreat, deadHeroesCost, 
                 		demageOnHeroes, roundsTaken, victoryPoints);
                 results.add(scoreModel);
             }
