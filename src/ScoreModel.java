@@ -17,11 +17,12 @@ public class ScoreModel {
 	private String deckURL;
 	private Hyperlink deckLink;
 	
-	public ScoreModel(String heroes, String quest, int finalThreat, int deadHeroesCost, int demageOnHeroes,
+	public ScoreModel(String heroes, String quest, String deckURL, int finalThreat, int deadHeroesCost, int demageOnHeroes,
 			int roundsTaken, int victoryPoints) {
 		super();
 		this.heroes = heroes;
 		this.quest = quest;
+		this.deckURL = deckURL;
 		this.finalThreat = finalThreat;
 		this.deadHeroesCost = deadHeroesCost;
 		this.demageOnHeroes = demageOnHeroes;
@@ -29,7 +30,6 @@ public class ScoreModel {
 		this.victoryPoints = victoryPoints;
 		this.finalScore = finalThreat + deadHeroesCost + demageOnHeroes + (10 * roundsTaken) - victoryPoints;
 		
-		deckURL = "https://ringsdb.com/decks";
 		deckLink = new Hyperlink("Deck");
 		
 		deckLink.setOnAction(e -> {
@@ -46,12 +46,13 @@ public class ScoreModel {
 		});
 	}
 
-	public ScoreModel(int id, String heroes, String quest, int finalThreat, int deadHeroesCost, int demageOnHeroes,
+	public ScoreModel(int id, String heroes, String quest, String deckURL, int finalThreat, int deadHeroesCost, int demageOnHeroes,
 			int roundsTaken, int victoryPoints) {
 		super();
 		this.id = id;
 		this.heroes = heroes;
 		this.quest = quest;
+		this.deckURL = deckURL;
 		this.finalThreat = finalThreat;
 		this.deadHeroesCost = deadHeroesCost;
 		this.demageOnHeroes = demageOnHeroes;
@@ -59,7 +60,6 @@ public class ScoreModel {
 		this.victoryPoints = victoryPoints;
 		this.finalScore = finalThreat + deadHeroesCost + demageOnHeroes + (10 * roundsTaken) - victoryPoints;
 		
-		deckURL = "https://ringsdb.com/decks";
 		deckLink = new Hyperlink("Deck");
 		
 		deckLink.setOnAction(e -> {

@@ -53,6 +53,7 @@ public class DBServices {
                 + " id integer PRIMARY KEY,\n"
         		+ " heroes text NOT NULL,\n"
                 + " quest text NOT NULL,\n"
+                + " deck_url text,\n"
         		+ " final_threat integer NOT NULL,\n"
                 + " dead_heroes_cost integer,\n"
         		+ " demage_on_heroes integer,\n"
@@ -75,20 +76,21 @@ public class DBServices {
      * @param score
      */
     public void insert(ScoreModel score) {  
-        String sql = "INSERT INTO scores(heroes, quest, final_threat, dead_heroes_cost, demage_on_heroes, "
-        		+ "rounds_taken, victory_points, final_score) VALUES(?,?,?,?,?,?,?,?)";  
+        String sql = "INSERT INTO scores(heroes, quest, deck_url, final_threat, dead_heroes_cost, demage_on_heroes, "
+        		+ "rounds_taken, victory_points, final_score) VALUES(?,?,?,?,?,?,?,?,?)";  
    
         try{  
             Connection conn = this.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, score.getHeroes());
             pstmt.setString(2, score.getQuest());
-            pstmt.setInt(3, score.getFinalThreat());
-            pstmt.setInt(4, score.getDeadHeroesCost());
-            pstmt.setInt(5, score.getDemageOnHeroes());
-            pstmt.setInt(6, score.getRoundsTaken());
-            pstmt.setInt(7, score.getVictoryPoints());
-            pstmt.setInt(8, score.getFinalScore());
+            pstmt.setString(3, score.getDeckURL());
+            pstmt.setInt(4, score.getFinalThreat());
+            pstmt.setInt(5, score.getDeadHeroesCost());
+            pstmt.setInt(6, score.getDemageOnHeroes());
+            pstmt.setInt(7, score.getRoundsTaken());
+            pstmt.setInt(8, score.getVictoryPoints());
+            pstmt.setInt(9, score.getFinalScore());
             pstmt.executeUpdate();  
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -102,6 +104,7 @@ public class DBServices {
     public void update(ScoreModel score) {
     	String sql = "UPDATE scores SET heroes = ?, "
     			+ "quest = ?, "
+    			+ "deck_url = ?, "
     			+ "final_threat = ?, "
     			+ "dead_heroes_cost = ?, "
     			+ "demage_on_heroes = ?, "
@@ -115,13 +118,14 @@ public class DBServices {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, score.getHeroes());
             pstmt.setString(2, score.getQuest());
-            pstmt.setInt(3, score.getFinalThreat());
-            pstmt.setInt(4, score.getDeadHeroesCost());
-            pstmt.setInt(5, score.getDemageOnHeroes());
-            pstmt.setInt(6, score.getRoundsTaken());
-            pstmt.setInt(7, score.getVictoryPoints());
-            pstmt.setInt(8, score.getFinalScore());
-            pstmt.setInt(9, score.getId());
+            pstmt.setString(3, score.getDeckURL());
+            pstmt.setInt(4, score.getFinalThreat());
+            pstmt.setInt(5, score.getDeadHeroesCost());
+            pstmt.setInt(6, score.getDemageOnHeroes());
+            pstmt.setInt(7, score.getRoundsTaken());
+            pstmt.setInt(8, score.getVictoryPoints());
+            pstmt.setInt(9, score.getFinalScore());
+            pstmt.setInt(10, score.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -163,13 +167,14 @@ public class DBServices {
             	int id = rs.getInt("id");
             	String heroes = rs.getString("heroes");
                 String quest = rs.getString("quest");
+                String deckURL = rs.getString("deck_url");
                 int finalThreat = rs.getInt("final_threat");
                 int deadHeroesCost = rs.getInt("dead_heroes_cost");
                 int demageOnHeroes = rs.getInt("demage_on_heroes");
                 int roundsTaken = rs.getInt("rounds_taken");
                 int victoryPoints = rs.getInt("victory_points");
                 
-                ScoreModel scoreModel = new ScoreModel(id, heroes, quest, finalThreat, deadHeroesCost, 
+                ScoreModel scoreModel = new ScoreModel(id, heroes, quest, deckURL, finalThreat, deadHeroesCost, 
                 		demageOnHeroes, roundsTaken, victoryPoints);
                 results.add(scoreModel);
             }

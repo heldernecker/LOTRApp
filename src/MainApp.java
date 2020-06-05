@@ -116,19 +116,27 @@ public class MainApp extends Application {
     	
     	// Hero line
     	Label heroesL = new Label("Heroes:");
-    	heroesL.setPrefWidth(60);
+    	heroesL.setPrefWidth(70);
     	TextField heroesTF = new TextField();
-    	heroesTF.setPrefWidth(320);
+    	heroesTF.setPrefWidth(310);
     	HBox heroes = new HBox(heroesL, heroesTF);
     	heroes.setSpacing(10);
     	
     	// Quest line
     	Label questL = new Label("Quest:");
-    	questL.setPrefWidth(60);
+    	questL.setPrefWidth(70);
     	TextField questTF = new TextField();
-    	questTF.setPrefWidth(320);
+    	questTF.setPrefWidth(310);
     	HBox quest = new HBox(questL, questTF);
     	quest.setSpacing(10);
+    	
+    	// DeckURL line
+    	Label deckURLL = new Label("Deck URL:");
+    	deckURLL.setPrefWidth(70);
+    	TextField deckURLTF = new TextField();
+    	deckURLTF.setPrefWidth(310);    	
+    	HBox deckURL = new HBox(deckURLL, deckURLTF);
+    	deckURL.setSpacing(10);
     	
     	double labelsW = 130;
     	// Line 3 - Final Threat and Rounds Taken
@@ -185,7 +193,7 @@ public class MainApp extends Application {
         	
     		addScore.setOnAction(e -> {
         		try {    			
-        			ScoreModel score = new ScoreModel(heroesTF.getText(), questTF.getText(), 
+        			ScoreModel score = new ScoreModel(heroesTF.getText(), questTF.getText(), deckURLTF.getText(), 
         					Integer.parseInt(finalThreatTF.getText()), Integer.parseInt(deadHeroesCostTF.getText()), 
         					Integer.parseInt(demageTF.getText()), Integer.parseInt(roundsTF.getText()), 
         					Integer.parseInt(victoryTF.getText()));
@@ -207,13 +215,14 @@ public class MainApp extends Application {
     		Button close = new Button("Close");
     		buttonHBox.getChildren().add(close);
     		
-    		heroesTF.setText(scoreModel.getHeroes());        	
-        	questTF.setText(scoreModel.getQuest());        	
-        	finalThreatTF.setText(scoreModel.getFinalThreat() + "");       	    	
-        	roundsTF.setText(scoreModel.getRoundsTaken() + "");        	
-        	demageTF.setText(scoreModel.getDemageOnHeroes() + "");        	
-        	deadHeroesCostTF.setText(scoreModel.getDeadHeroesCost() + "");        	
-        	victoryTF.setText(scoreModel.getVictoryPoints() + "");        	
+    		heroesTF.setText(scoreModel.getHeroes());
+        	questTF.setText(scoreModel.getQuest());
+        	deckURLTF.setText(scoreModel.getDeckURL());
+        	finalThreatTF.setText(scoreModel.getFinalThreat() + "");
+        	roundsTF.setText(scoreModel.getRoundsTaken() + "");
+        	demageTF.setText(scoreModel.getDemageOnHeroes() + "");
+        	deadHeroesCostTF.setText(scoreModel.getDeadHeroesCost() + "");
+        	victoryTF.setText(scoreModel.getVictoryPoints() + "");
         	
         	close.setOnAction(e -> {
         		addStage.close();
@@ -222,12 +231,13 @@ public class MainApp extends Application {
         	if (opt == 2) { // User will just see the details
         		title = "Score Details";
         		
-            	heroesTF.setDisable(true);            	
-            	questTF.setDisable(true);            	
-            	finalThreatTF.setDisable(true);           	
-            	roundsTF.setDisable(true);            	
-            	demageTF.setDisable(true);            	
-            	deadHeroesCostTF.setDisable(true);             	
+            	heroesTF.setDisable(true);
+            	questTF.setDisable(true);
+            	deckURLTF.setDisable(true);
+            	finalThreatTF.setDisable(true);
+            	roundsTF.setDisable(true);
+            	demageTF.setDisable(true);
+            	deadHeroesCostTF.setDisable(true);
             	victoryTF.setDisable(true);
         		
         	} else if (opt == 3) { // Users will be able to update the score
@@ -239,9 +249,9 @@ public class MainApp extends Application {
         		update.setOnAction(e -> {
         			try {    			
             			ScoreModel score = new ScoreModel(scoreModel.getId(), heroesTF.getText(), questTF.getText(), 
-            					Integer.parseInt(finalThreatTF.getText()), Integer.parseInt(deadHeroesCostTF.getText()), 
-            					Integer.parseInt(demageTF.getText()), Integer.parseInt(roundsTF.getText()), 
-            					Integer.parseInt(victoryTF.getText()));
+            					deckURLTF.getText(), Integer.parseInt(finalThreatTF.getText()), 
+            					Integer.parseInt(deadHeroesCostTF.getText()), Integer.parseInt(demageTF.getText()), 
+            					Integer.parseInt(roundsTF.getText()), Integer.parseInt(victoryTF.getText()));
             			
             			dbServices.update(score);
             			
@@ -257,12 +267,13 @@ public class MainApp extends Application {
     	
     	addPane.add(heroes, 0, 0);
     	addPane.add(quest, 0, 1);
-    	addPane.add(separator1, 0, 2);
-    	addPane.add(line3, 0, 3);
-    	addPane.add(line4, 0, 4);
-    	addPane.add(line5, 0, 5);
-    	addPane.add(separator2, 0, 6);
-    	addPane.add(buttonHBox, 0, 7);
+    	addPane.add(deckURL, 0, 2);
+    	addPane.add(separator1, 0, 3);
+    	addPane.add(line3, 0, 4);
+    	addPane.add(line4, 0, 5);
+    	addPane.add(line5, 0, 6);    	
+    	addPane.add(separator2, 0, 7);
+    	addPane.add(buttonHBox, 0, 8);
     	
     	addStage.setTitle(title);
     	addStage.setScene(addScene);
