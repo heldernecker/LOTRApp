@@ -1,3 +1,8 @@
+import javafx.scene.Scene;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.layout.VBox;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 
 public class ScoreModel {
 	private int id;
@@ -9,6 +14,8 @@ public class ScoreModel {
 	private int roundsTaken;
 	private int victoryPoints;
 	private int finalScore;
+	private String deckURL;
+	private Hyperlink deckLink;
 	
 	public ScoreModel(String heroes, String quest, int finalThreat, int deadHeroesCost, int demageOnHeroes,
 			int roundsTaken, int victoryPoints) {
@@ -21,6 +28,22 @@ public class ScoreModel {
 		this.roundsTaken = roundsTaken;
 		this.victoryPoints = victoryPoints;
 		this.finalScore = finalThreat + deadHeroesCost + demageOnHeroes + (10 * roundsTaken) - victoryPoints;
+		
+		deckURL = "https://ringsdb.com/decks";
+		deckLink = new Hyperlink("Deck");
+		
+		deckLink.setOnAction(e -> {
+			Stage webStage = new Stage();
+			WebView webView = new WebView();
+			
+			webView.getEngine().load(deckURL);
+
+	        VBox vBox = new VBox(webView);
+	        Scene scene = new Scene(vBox, 960, 600);
+
+	        webStage.setScene(scene);
+	        webStage.show();
+		});
 	}
 
 	public ScoreModel(int id, String heroes, String quest, int finalThreat, int deadHeroesCost, int demageOnHeroes,
@@ -35,6 +58,22 @@ public class ScoreModel {
 		this.roundsTaken = roundsTaken;
 		this.victoryPoints = victoryPoints;
 		this.finalScore = finalThreat + deadHeroesCost + demageOnHeroes + (10 * roundsTaken) - victoryPoints;
+		
+		deckURL = "https://ringsdb.com/decks";
+		deckLink = new Hyperlink("Deck");
+		
+		deckLink.setOnAction(e -> {
+			Stage webStage = new Stage();
+			WebView webView = new WebView();
+			
+			webView.getEngine().load(deckURL);
+
+	        VBox vBox = new VBox(webView);
+	        Scene scene = new Scene(vBox, 960, 600);
+
+	        webStage.setScene(scene);
+	        webStage.show();
+		});
 	}
 
 	public int getId() {
@@ -107,6 +146,22 @@ public class ScoreModel {
 
 	public void setFinalScore(int finalScore) {
 		this.finalScore = finalScore;
+	}
+
+	public String getDeckURL() {
+		return deckURL;
+	}
+
+	public void setDeckURL(String deckURL) {
+		this.deckURL = deckURL;
+	}
+
+	public Hyperlink getDeckLink() {
+		return deckLink;
+	}
+
+	public void setDeckLink(Hyperlink deckLink) {
+		this.deckLink = deckLink;
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TableColumn;
@@ -48,12 +49,18 @@ public class MainApp extends Application {
     	scoreCol.setPrefWidth(150);
     	scoreCol.setStyle( "-fx-alignment: CENTER;");
     	
+    	TableColumn<Hyperlink, ScoreModel> deckLink = new TableColumn<>("Deck Link");
+    	deckLink.setCellValueFactory(new PropertyValueFactory<>("deckLink"));
+    	deckLink.setPrefWidth(100);
+    	deckLink.setStyle( "-fx-alignment: CENTER;");
+    	
     	tableView.getColumns().add(questCol);
     	tableView.getColumns().add(heroesCol);
     	tableView.getColumns().add(scoreCol);
+    	tableView.getColumns().add(deckLink);
     	
     	loadScores(dbServices.selectAll());
-    	tableView.setPrefWidth(705);
+    	tableView.setPrefWidth(805);
     	tableView.setPrefHeight(240);
     	
     	options.setAlignment(Pos.BASELINE_CENTER);
@@ -105,7 +112,7 @@ public class MainApp extends Application {
     	BorderPane.setMargin(addPane, new Insets(10, 10, 10, 10));
     	
     	Scene addScene = new Scene(fullPane);
-    	Stage addStage = new Stage();    	
+    	Stage addStage = new Stage();
     	
     	// Hero line
     	Label heroesL = new Label("Heroes:");
