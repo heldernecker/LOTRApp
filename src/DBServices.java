@@ -122,8 +122,25 @@ public class DBServices {
             pstmt.setInt(7, score.getVictoryPoints());
             pstmt.setInt(8, score.getFinalScore());
             pstmt.setInt(9, score.getId());
-            pstmt.executeUpdate();  
+            pstmt.executeUpdate();
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    /**
+     * Deletes score from database
+     * @param score
+     */
+    public void delete(ScoreModel score) {
+    	String sql = "DELETE FROM scores WHERE id = ?";
+    	
+    	try {
+    		Connection conn = this.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, score.getId());
+            pstmt.executeUpdate();
+    	} catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }

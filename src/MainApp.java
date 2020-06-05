@@ -24,7 +24,8 @@ public class MainApp extends Application {
 	private Button newRecord = new Button("Add New Score");
 	private Button seeRecord = new Button("Details");
 	private Button updateRecord = new Button("Update");
-	private HBox options = new HBox(newRecord, seeRecord, updateRecord);
+	private Button deleteRecord = new Button("Delete");
+	private HBox options = new HBox(newRecord, seeRecord, updateRecord, deleteRecord);
 	
 	@SuppressWarnings("rawtypes")
 	private TableView tableView = new TableView();
@@ -70,6 +71,12 @@ public class MainApp extends Application {
         updateRecord.setOnAction(e -> {
         	ScoreModel score = (ScoreModel) tableView.getSelectionModel().getSelectedItem();
         	openScoreDetails(3, score);
+        });
+        
+        deleteRecord.setOnAction(e -> {
+        	ScoreModel score = (ScoreModel) tableView.getSelectionModel().getSelectedItem();
+        	dbServices.delete(score);
+        	loadScores(dbServices.selectAll());
         });
                
         mainPane.add(tableView, 0, 0, 1, 1);
