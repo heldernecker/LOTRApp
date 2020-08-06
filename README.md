@@ -6,6 +6,10 @@ Java aplication to register score for the Lord of the Rings - Living Card Game
 ![App Main Page](https://github.com/heldernecker/LOTRApp/blob/master/image%20(5).png)
 
 
-### Details scene, used to add new score (all fields start blank), update score (all fields start with current data) or just views (all fields are disabled)
+### Details scene
+
+1. add new score (all fields start blank)
+2. update score (all fields start with current data)
+3. view details (all fields are disabled)
 
 ![Details Scene](https://github.com/heldernecker/LOTRApp/blob/master/image%20(6).png)
